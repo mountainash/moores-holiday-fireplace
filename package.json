@@ -1,0 +1,12 @@
+{
+  "name": "gameoflights",
+  "version": "0.0.0",
+  "description": "Game of Life output to Holiday by MooresCloud, arranged in a 7x7 grid",
+  "main": "index.js",
+  "author": "Katie Miller",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "simplesets": "~1.2.0",
+    "underscore": "~1.6.0"
+  } 
+}
