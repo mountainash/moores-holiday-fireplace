@@ -25,8 +25,8 @@ var tick = function(world) {
     }
 
     var inBound = function(coord) {
-        if (coord === -1) { return sideLength - 1; } 
-        if (coord === sideLength) { return 0; }
+        if (coord == -1) { return sideLength - 1; } 
+        if (coord >= sideLength) { return coord % sideLength; }
         return coord;
     }
  
@@ -36,41 +36,53 @@ var tick = function(world) {
     }, []); 
 
     var livePoints = worldIndicies.map(indexToPoint);
+ 
+    var pointEquals = function(p1, p2) {
+        return p1.x == p2.x && p1.y == p2.y;
+    }
+  
+    var contains = function(pointList, point) {
+        var result = false;
+         _.each(pointList, function(p) {
+             if (pointEquals(p, point)) {
+                 result = true;
+                 return false;
+             }
+        });
+        return result;
+    }
 
     var liveNeighbours = function(point, livePoints) {
         return _.filter(neighbours(point), function(neighbour) {
-            result = false;
-            _.each(livePoints, function(livePoint) {
-                if (livePoint.x == neighbour.x && livePoint.y == neighbour.y) {
-                    result = true;
-                }
-            });
-            return result;
+            return contains(livePoints, neighbour);
         }); 
     }
  
-    var stillAlive = _.filter(livePoints, function(point) {
+    var survivors = _.filter(livePoints, function(point) {
         var live = liveNeighbours(point, livePoints).length;
         return live == 2 || live == 3;
     }); 
 
-    var possibilities = _.foldl(livePoints, function(acc, point) {
+    var possibilities = _.reduce(livePoints, function(acc, point) {
         return acc.concat(neighbours(point)); 
     }, []);
 
-    var uniquePossibilities = new sets.Set(possibilities).array();
+    var deadPossibilities = _.filter(possibilities, function(point) {
+        return ! contains(livePoints, point); 
+    });
+
+    var uniquePossibilities = new sets.Set(deadPossibilities).array();
 
     var resurrected = _.filter(uniquePossibilities, function(point) {
         return liveNeighbours(point, livePoints).length == 3; 
     });
 
-    var newWorld = new sets.Set(stillAlive.concat(resurrected));
+    var newWorld = survivors.concat(resurrected);
 
     var newWorldArr = Array.apply(null, new Array(sideLength * sideLength)).map(Boolean.prototype.valueOf, false);
-    _.each(newWorld.array(), function(point) {
+    _.each(newWorld, function(point) {
         newWorldArr[pointToIndex(point)] = true;
     });
-
     return newWorldArr;
 };
 

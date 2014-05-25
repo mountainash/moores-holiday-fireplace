@@ -1,10 +1,19 @@
-var http = require("http");
+var http = require('http');
+var HoliUdp = require('holiday-udp');
+var holiudp;
+var alive;
+var dead;
+var black = [0,0,0];
 
-var holidayHost = "192.168.23.254";
-var setLightsPath = "/iotas/0.1/device/moorescloud.holiday/localhost/setlights";
-var setLightsUrl = "http://" + holidayHost + setLightsPath;
-var alive = "#360A5E";
-var dead = "#2A40C7";
+var hexToRgb = function(hex) {
+    var re = /#(\w{2})(\w{2})(\w{2})/;
+    var result = re.exec(hex);
+    if (result) {
+        var res = [ parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16) ];
+        return res;
+    }
+    return black;
+};
 
 var sendLights = function(bools) {
     var boolsToLights = function(boolArray) {
@@ -22,30 +31,24 @@ var sendLights = function(bools) {
             return dead; 
         });
         // First light not part of grid 
-        colours[0] = "#000000"; 
+        colours[0] = black; 
         return colours;
     };
+    sendRequest(boolsToLights(bools));
+};
 
-    var lightJson = JSON.stringify({ "lights": boolsToLights(bools) });
-
-    var setLightsOpts = {
-        host: holidayHost, 
-        port: 80,
-        path: setLightsPath, 
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(lightJson, 'utf8')
+var sendRequest = function(lightsArray, responseFunc) {
+    holiudp.send(lightsArray, function(err) {
+        if (err) {
+            console.log(err);
+            if (responseFunc) { responseFunc(err); }
         }
-    };
-    
-    var setLightsReq = http.request(setLightsOpts); 
-    console.log("Sending request");
-    setLightsReq.write(lightJson);
-    setLightsReq.end();
-    setLightsReq.on('error', function(e) {
-        console.error(e);
     });
 };
 
 module.exports = sendLights
+sendLights.init = function(holidayHost, aliveCol, deadCol) {
+    alive = hexToRgb(aliveCol);
+    dead = hexToRgb(deadCol);
+    holiudp = new HoliUdp(holidayHost);
+};

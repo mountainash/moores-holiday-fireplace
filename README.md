@@ -1,4 +1,3 @@
-game-of-lights
-==============
+The OpenShift `nodejs` cartridge documentation can be found at:
 
-Game of Life output to a Holiday by MooresCloud arranged as a grid
+https://github.com/openshift/origin-server/tree/master/cartridges/openshift-origin-cartridge-nodejs/README.md

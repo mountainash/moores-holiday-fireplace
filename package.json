@@ -1,12 +1,35 @@
 {
-  "name": "gameoflights",
-  "version": "0.0.0",
-  "description": "Game of Life output to Holiday by MooresCloud, arranged in a 7x7 grid",
-  "main": "index.js",
-  "author": "Katie Miller",
-  "license": "BSD-2-Clause",
+  "name": "GameofLights",
+  "version": "1.0.0",
+  "description": "Game of Life output to a Holiday by MooresCloud, arranged in 7x7 grid",
+  "keywords": [
+    "OpenShift",
+    "Holiday",
+    "game of life",
+    "openshift"
+  ],
+  "author": {
+    "name": "Katie Miller",
+    "email": "katie@codemiller.com",
+    "url": "http://www.codemiller.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codemiller/game-of-lights"
+  },
+  "engines": {
+    "node": ">= 0.10.0",
+    "npm": ">= 1.0.0"
+  },
   "dependencies": {
+    "express": "~4.3.1",
+    "body-parser": "~1.2.0",
     "simplesets": "~1.2.0",
-    "underscore": "~1.6.0"
-  } 
+    "underscore": "~1.6.0",
+    "holiday-udp": "~0.1.2"
+  },
+  "devDependencies": {},
+  "bundleDependencies": [],
+  "private": true,
+  "main": "server.js"
 }
