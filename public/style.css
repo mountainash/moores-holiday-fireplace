@@ -1,0 +1,34 @@
+table, th, td {
+  border: 1px solid black;
+}
+
+table {
+  width: 294px;
+  height: 294px;
+}
+
+.dead {
+  background: white;
+}
+
+.alive {
+  background: blue;
+}
+
+.form {
+  padding-top: 20px;
+}
+
+.button {
+  margin-top: 10px;
+  padding-top: 10px;
+  background: rgb(150,233,233);
+  width: 70px;
+  height: 30px;
+  text-align: center;
+}
+
+.message {
+  padding-top: 20px;
+  color: blue;
+}

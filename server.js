@@ -29,7 +29,7 @@ var GameOfLightsApp = function() {
         }
 
         //  Local cache for static content
-        self.zcache['index.html'] = fs.readFileSync('./index.html');
+        self.zcache['index.html'] = fs.readFileSync('public/index.html');
     };
 
 
@@ -80,7 +80,7 @@ var GameOfLightsApp = function() {
 
     self.initializeServer = function() {
         self.app = express();
-        self.app.use(express.static(path.join(__dirname, 'resources')));
+        self.app.use(express.static(path.join(__dirname, '/')));
         self.app.use(bodyParser());
         self.app.get('/', self.getHome);
         self.app.post('/holiday', self.postWorld);
