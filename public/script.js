@@ -74,7 +74,6 @@ var displayTicks = function(seedPattern, delay, alive, dead) {
 };
 
 var doTick = function(state, delay) {
-    console.log('ticking');
     setTimeout(function() {
         if (state.indexOf(true) != -1) {
             var newWorld = gametick(state);

@@ -6,7 +6,7 @@
   <title>Game of Lights</title>
   <link href="public/style.css" rel="stylesheet" type="text/css"/>
 </head>
-<body>
+<body onload="setHandlers()">
   <h1>Game of Lights</h1>
   <table class="game">
     <tr>
@@ -78,7 +78,7 @@
       Tick milliseconds: <input type="text" id="tickDelay" value="1000"><br>
       Alive colour: <input type="text" id="aliveColour" value="#360A5E"><br>
       Dead colour: <input type="text" id="deadColour" value="#000000"><br>
-      <div class="button" id="button">Start</div>
+      <div class="button" id="button" onclick="submit()">Start</div>
   </form>
   <script src="public/script.js"></script>
 </body>
