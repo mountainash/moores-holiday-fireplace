@@ -40,7 +40,7 @@ var tick = function(worldBools) {
     }, []).map(indexToPoint); 
 
     var containsPoint = function(pointList, point) {
-        return _.find(pointList, _.partial(pointEquals, point)); 
+        return undefined !== _.find(pointList, _.partial(pointEquals, point)); 
     };
 
     var liveNeighbours = function(point, livePoints) {
@@ -60,7 +60,12 @@ var tick = function(worldBools) {
         return ! containsPoint(livePoints, point); 
     });
 
-    var spawned = _.filter(_.uniq(spawnCandidates, false, pointEquals), function(point) {
+    var uniqueCandidates = _.reduce(spawnCandidates, function(acc, point) {
+        if (! containsPoint(acc, point)) { acc.push(point); } 
+        return acc;
+    }, []);
+
+    var spawned = _.filter(uniqueCandidates, function(point) {
         return liveNeighbours(point, livePoints).length == 3; 
     });
 
