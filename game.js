@@ -64,13 +64,11 @@ var tick = function(worldBools) {
         return liveNeighbours(point, livePoints).length == 3; 
     });
 
-    var newWorld = survivors.concat(spawned);
+    var newWorldIndices = survivors.concat(spawned).map(pointToIndex);
 
-    var newWorldBools = Array.apply(null, new Array(sideLength * sideLength)).map(Boolean.prototype.valueOf, false);
-    _.each(newWorld, function(point) {
-        newWorldBools[pointToIndex(point)] = true;
+    return _.map(_.range(sideLength * sideLength), function(index) {
+        return _.contains(newWorldIndices, index); 
     });
-    return newWorldBools;
 };
 
 module.exports = tick 
