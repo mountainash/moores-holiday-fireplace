@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building client JavaScript"
+cd $OPENSHIFT_REPO_DIR
+./node_modules/.bin/browserify client.js -o public/script.js
