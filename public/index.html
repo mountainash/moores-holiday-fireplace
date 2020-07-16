@@ -21,7 +21,7 @@
     <tr>
         <td id="7" class="dead"/>
         <td id="8" class="dead"/>
-        <td id="9" class="dead"/> 
+        <td id="9" class="dead"/>
         <td id="10" class="dead"/>
         <td id="11" class="dead"/>
         <td id="12" class="dead"/>
@@ -73,12 +73,16 @@
         <td id="48" class="dead"/>
     </tr>
   </table>
-  <div class="form">
-      Holiday host: <input type="text" id="holidayHost" value="192.168.23.254"><br>
-      Tick milliseconds: <input type="text" id="tickDelay" value="1000"><br>
-      Alive colour: <input type="text" id="aliveColour" value="#360A5E"><br>
-      Dead colour: <input type="text" id="deadColour" value="#000000"><br>
-      <div class="button" id="button" onclick="submit()">Start</div>
+  <form>
+    <div>
+        Holiday host: <input type="text" id="holidayHost" value="192.168.23.254"><br>
+        Tick milliseconds: <input type="text" id="tickDelay" value="1000"><br>
+        Alive colour: <input type="text" id="aliveColour" value="#360A5E"><br>
+        Dead colour: <input type="text" id="deadColour" value="#000000"><br>
+    </div>
+    <div>
+        <button id="button" onclick="submit()">Start</button>
+    </div>
   </form>
   <script src="public/script.js"></script>
 </body>

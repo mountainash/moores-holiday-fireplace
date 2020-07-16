@@ -18,31 +18,31 @@ var toggleState = function() {
 
 var submit = function() {
     var button = document.getElementById('button');
-    button.parentNode.removeChild(button); 
+    button.parentNode.removeChild(button);
 
     var tickDelay = getValue('tickDelay');
     var aliveColour = getValue('aliveColour');
     var deadColour = getValue('deadColour');
     var worldPattern = [];
     for (var i = 0; i < 49; i++) {
-       var state = document.getElementById(i).className;
-       if (state === 'alive') {
-           worldPattern.push(true);
-       } else {
-           worldPattern.push(false);
-       } 
+		var state = document.getElementById(i).className;
+		if (state === 'alive') {
+			worldPattern.push(true);
+		} else {
+			worldPattern.push(false);
+		}
     }
 
     var data = {
         'host': getValue('holidayHost'),
         'delay': tickDelay,
-        'alive': aliveColour, 
-        'dead': deadColour, 
-        'pattern': worldPattern 
-    }; 
+        'alive': aliveColour,
+        'dead': deadColour,
+        'pattern': worldPattern
+    };
 
     var http = new XMLHttpRequest();
-    http.open('POST','/holiday',true);
+    http.open('POST', '/holiday',true);
     http.setRequestHeader('Content-type','application/json;charset=UTF-8');
     http.onreadystatechange = function() {
         if (http.readyState == 4 && http.status == 200) {
@@ -60,11 +60,11 @@ var updateCells = function(cellBools) {
         var newState = cellBools[i];
         var cell = document.getElementById(i);
         if (newState) {
-            cell.className = 'alive'; 
+            cell.className = 'alive';
         } else {
             cell.className = 'dead';
         }
-    } 
+    }
 };
 
 var displayTicks = function(seedPattern, delay, alive, dead) {
@@ -80,7 +80,7 @@ var doTick = function(state, delay) {
             updateCells(newWorld);
             doTick(newWorld, delay);
         }
-    }, delay); 
+    }, delay);
 }
 
 var updateCellCss = function(newAlive, newDead) {
@@ -102,7 +102,7 @@ var setMessage = function(msg) {
     message.className = 'message';
     message.innerHTML = msg;
     document.body.appendChild(message);
-}; 
+};
 
 var getValue = function(elemId) {
     return document.getElementById(elemId).value;
@@ -111,7 +111,6 @@ var getValue = function(elemId) {
 // Initial setup
 setHandlers(toggleState);
 document.getElementById('button').onclick = submit;
-
 },{"./game":2}],2:[function(require,module,exports){
 var _ = require('underscore')._;
 
@@ -119,22 +118,22 @@ var tick = function(worldBools) {
     var sideLength = 7;
 
     var pointToIndex = function(point) {
-        return point.x + (point.y * sideLength); 
+        return point.x + (point.y * sideLength);
     }
 
     var indexToPoint = function(index) {
-        var pointX = index % sideLength;  
-        var pointY = Math.floor(index/sideLength); 
+        var pointX = index % sideLength;
+        var pointY = Math.floor(index/sideLength);
         return { x: pointX, y: pointY };
     }
 
     var pointEquals = function(p1, p2) {
         return p1.x == p2.x && p1.y == p2.y;
     }
- 
+
     var neighbours = function(p) {
-        return [{x: p.x-1, y: p.y-1},{x: p.x,   y: p.y-1},{x: p.x+1, y: p.y-1},   
-                {x: p.x-1, y: p.y},  {x: p.x+1, y: p.y},   
+        return [{x: p.x-1, y: p.y-1},{x: p.x,   y: p.y-1},{x: p.x+1, y: p.y-1},
+                {x: p.x-1, y: p.y},  {x: p.x+1, y: p.y},
                 {x: p.x-1, y: p.y+1},{x: p.x,   y: p.y+1},{x: p.x+1, y: p.y+1}]
                .map(wrapPoints);
     };
@@ -144,55 +143,54 @@ var tick = function(worldBools) {
     }
 
     var inBound = function(coord) {
-        if (coord == -1) { return sideLength - 1; } 
+        if (coord == -1) { return sideLength - 1; }
         if (coord >= sideLength) { return coord % sideLength; }
         return coord;
     }
- 
-    var livePoints = worldBools.reduce(function(acc, elem, index) { 
+
+    var livePoints = worldBools.reduce(function(acc, elem, index) {
         if(elem) { acc.push(index); }
         return acc;
-    }, []).map(indexToPoint); 
+    }, []).map(indexToPoint);
 
     var containsPoint = function(pointList, point) {
-        return undefined !== _.find(pointList, _.partial(pointEquals, point)); 
+        return undefined !== _.find(pointList, _.partial(pointEquals, point));
     };
 
     var liveNeighbours = function(point, livePoints) {
         return _.filter(neighbours(point), function(neighbour) {
             return containsPoint(livePoints, neighbour);
-        }); 
+        });
     };
- 
+
     var survivors = _.filter(livePoints, function(point) {
         var live = liveNeighbours(point, livePoints).length;
         return live == 2 || live == 3;
-    }); 
+    });
 
     var spawnCandidates = _.filter(_.reduce(livePoints, function(acc, point) {
-        return acc.concat(neighbours(point)); 
+        return acc.concat(neighbours(point));
     }, []), function(point) {
-        return ! containsPoint(livePoints, point); 
+        return ! containsPoint(livePoints, point);
     });
 
     var uniqueCandidates = _.reduce(spawnCandidates, function(acc, point) {
-        if (! containsPoint(acc, point)) { acc.push(point); } 
+        if (! containsPoint(acc, point)) { acc.push(point); }
         return acc;
     }, []);
 
     var spawned = _.filter(uniqueCandidates, function(point) {
-        return liveNeighbours(point, livePoints).length == 3; 
+        return liveNeighbours(point, livePoints).length == 3;
     });
 
     var newWorldIndices = survivors.concat(spawned).map(pointToIndex);
 
     return _.map(_.range(sideLength * sideLength), function(index) {
-        return _.contains(newWorldIndices, index); 
+        return _.contains(newWorldIndices, index);
     });
 };
 
-module.exports = tick 
-
+module.exports = tick
 },{"underscore":3}],3:[function(require,module,exports){
 //     Underscore.js 1.6.0
 //     http://underscorejs.org

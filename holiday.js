@@ -1,4 +1,3 @@
-var http = require('http');
 var HoliUdp = require('holiday-udp');
 var holiudp;
 var alive;
@@ -28,10 +27,10 @@ var sendLights = function(bools) {
                                  );
         var colours = gridFormatted.map(function(bool) {
             if (bool) { return alive; }
-            return dead; 
+            return dead;
         });
-        // First light not part of grid 
-        colours[0] = black; 
+        // First light not part of grid
+        colours[0] = black;
         return colours;
     };
     sendRequest(boolsToLights(bools));

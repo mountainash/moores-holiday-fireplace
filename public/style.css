@@ -1,3 +1,8 @@
+body {
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 table, th, td {
   border: 1px solid black;
 }
@@ -5,6 +10,7 @@ table, th, td {
 table {
   width: 294px;
   height: 294px;
+  margin: 1em auto;
 }
 
 .dead {
@@ -15,17 +21,12 @@ table {
   background: blue;
 }
 
-.form {
+form {
   padding-top: 20px;
 }
 
-.button {
-  margin-top: 10px;
-  padding-top: 10px;
-  background: rgb(150,233,233);
-  width: 70px;
-  height: 30px;
-  text-align: center;
+button {
+  font-size: x-large;
 }
 
 .message {

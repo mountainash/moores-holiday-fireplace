@@ -17,31 +17,31 @@ var toggleState = function() {
 
 var submit = function() {
     var button = document.getElementById('button');
-    button.parentNode.removeChild(button); 
+    button.parentNode.removeChild(button);
 
     var tickDelay = getValue('tickDelay');
     var aliveColour = getValue('aliveColour');
     var deadColour = getValue('deadColour');
     var worldPattern = [];
     for (var i = 0; i < 49; i++) {
-       var state = document.getElementById(i).className;
-       if (state === 'alive') {
-           worldPattern.push(true);
-       } else {
-           worldPattern.push(false);
-       } 
+		var state = document.getElementById(i).className;
+		if (state === 'alive') {
+			worldPattern.push(true);
+		} else {
+			worldPattern.push(false);
+		}
     }
 
     var data = {
         'host': getValue('holidayHost'),
         'delay': tickDelay,
-        'alive': aliveColour, 
-        'dead': deadColour, 
-        'pattern': worldPattern 
-    }; 
+        'alive': aliveColour,
+        'dead': deadColour,
+        'pattern': worldPattern
+    };
 
     var http = new XMLHttpRequest();
-    http.open('POST','/holiday',true);
+    http.open('POST', '/holiday',true);
     http.setRequestHeader('Content-type','application/json;charset=UTF-8');
     http.onreadystatechange = function() {
         if (http.readyState == 4 && http.status == 200) {
@@ -59,11 +59,11 @@ var updateCells = function(cellBools) {
         var newState = cellBools[i];
         var cell = document.getElementById(i);
         if (newState) {
-            cell.className = 'alive'; 
+            cell.className = 'alive';
         } else {
             cell.className = 'dead';
         }
-    } 
+    }
 };
 
 var displayTicks = function(seedPattern, delay, alive, dead) {
@@ -79,7 +79,7 @@ var doTick = function(state, delay) {
             updateCells(newWorld);
             doTick(newWorld, delay);
         }
-    }, delay); 
+    }, delay);
 }
 
 var updateCellCss = function(newAlive, newDead) {
@@ -101,7 +101,7 @@ var setMessage = function(msg) {
     message.className = 'message';
     message.innerHTML = msg;
     document.body.appendChild(message);
-}; 
+};
 
 var getValue = function(elemId) {
     return document.getElementById(elemId).value;

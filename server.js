@@ -1,45 +1,42 @@
-#!/bin/env node
-
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 var express = require('express');
 var fs = require('fs');
 var path = require('path');
 var bodyParser = require('body-parser')
 var holiday = require('./holiday');
 var gametick = require('./game');
-var ticking  = 0;
+var ticking = 0;
 
 var GameOfLightsApp = function() {
-
     var self = this;
 
     self.setupVariables = function() {
-        //  Set the environment variables 
+        //  Set the environment variables
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-        self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+        self.port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
         if (typeof self.ipaddress === "undefined") {
             console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
             self.ipaddress = "127.0.0.1";
-        };
+        }
     };
 
     self.populateCache = function() {
         if (typeof self.zcache === "undefined") {
             self.zcache = { 'index.html': '' };
         }
-
         //  Local cache for static content
         self.zcache['index.html'] = fs.readFileSync('public/index.html');
     };
-
 
     self.cache_get = function(key) { return self.zcache[key]; };
 
     self.terminator = function(sig){
         if (typeof sig === "string") {
-           console.log('%s: Received %s - terminating sample app ...',
-                       Date(Date.now()), sig);
-           process.exit(1);
+            console.log('%s: Received %s - terminating sample app ...',
+            Date(Date.now()), sig);
+            process.exit(1);
         }
         console.log('%s: Node server stopped.', Date(Date.now()) );
     };
@@ -51,13 +48,13 @@ var GameOfLightsApp = function() {
         // Removed 'SIGPIPE' from the list - bugz 852598
         ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
          'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
-        ].forEach(function(element, index, array) {
+        ].forEach(function(element) {
             process.on(element, function() { self.terminator(element); });
         });
     };
 
     self.postWorld = function(req, res) {
-        if (ticking) { 
+        if (ticking) {
             clearTimeout(ticking);
             ticking = null;
         }
@@ -70,7 +67,7 @@ var GameOfLightsApp = function() {
         holiday.init(host, aliveColour, deadColour);
         res.sendStatus(200);
         console.log('Sending pattern to Holiday');
-        self.doTick(startPattern, tickDelay);  
+        self.doTick(startPattern, tickDelay);
     };
 
     self.getHome = function(req, res) {
@@ -98,7 +95,7 @@ var GameOfLightsApp = function() {
     self.start = function() {
         self.app.listen(self.port, self.ipaddress, function() {
             console.log('%s: Node server started on %s:%d ...',
-                        Date(Date.now() ), self.ipaddress, self.port);
+            Date(Date.now() ), self.ipaddress, self.port);
         });
     };
 
@@ -106,11 +103,11 @@ var GameOfLightsApp = function() {
         // Add the unused light at the start of the string
         var render = [false].concat(world);
         holiday(render);
-        ticking = setTimeout(function() { 
+        ticking = setTimeout(function() {
             self.doTick(gametick(world), delay);
         }, delay);
     }
-};   
+};
 
 var zapp = new GameOfLightsApp();
 zapp.initialize();

@@ -10,12 +10,12 @@
   ],
   "author": {
     "name": "Katie Miller",
-    "email": "katie@codemiller.com",
-    "url": "http://www.codemiller.com/"
+    "email": "katie@katiejots.com",
+    "url": "http://www.katiejots.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/codemiller/game-of-lights"
+    "url": "https://github.com/katiejots/game-of-lights"
   },
   "engines": {
     "node": ">= 0.10",
