@@ -1,6 +1,6 @@
 {
   "name": "GameofLights",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Game of Life output to a Holiday by MooresCloud, arranged in 7x7 grid",
   "keywords": [
     "OpenShift",
@@ -25,9 +25,9 @@
     "prestart": "./node_modules/.bin/browserify client.js -o public/script.js"
   },
   "dependencies": {
-    "body-parser": "~1.2.0",
+    "body-parser": "^1.19.0",
     "browserify": "~3.41.0",
-    "express": "~4.3.1",
+    "express": "^4.17.1",
     "holiday-udp": "~0.1.2",
     "underscore": "~1.6.0"
   },

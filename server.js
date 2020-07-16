@@ -68,7 +68,7 @@ var GameOfLightsApp = function() {
         var deadColour = req.body.dead || "#000000";
 
         holiday.init(host, aliveColour, deadColour);
-        res.send(200);
+        res.sendStatus(200);
         console.log('Sending pattern to Holiday');
         self.doTick(startPattern, tickDelay);  
     };
@@ -81,7 +81,8 @@ var GameOfLightsApp = function() {
     self.initializeServer = function() {
         self.app = express();
         self.app.use(express.static(path.join(__dirname, '/')));
-        self.app.use(bodyParser());
+        self.app.use(bodyParser.urlencoded({ extended: false }));
+        self.app.use(bodyParser.json());
         self.app.get('/', self.getHome);
         self.app.post('/holiday', self.postWorld);
     };

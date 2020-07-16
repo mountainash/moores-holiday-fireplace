@@ -175,12 +175,12 @@ var tick = function(worldBools) {
         return ! containsPoint(livePoints, point); 
     });
 
-    var uniqCandidates = _.reduce(spawnCandidates, function(acc, point) {
+    var uniqueCandidates = _.reduce(spawnCandidates, function(acc, point) {
         if (! containsPoint(acc, point)) { acc.push(point); } 
         return acc;
     }, []);
 
-    var spawned = _.filter(uniqCandidates, function(point) {
+    var spawned = _.filter(uniqueCandidates, function(point) {
         return liveNeighbours(point, livePoints).length == 3; 
     });
 
