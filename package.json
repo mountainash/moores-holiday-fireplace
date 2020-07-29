@@ -17,22 +17,21 @@
     "type": "git",
     "url": "https://github.com/codemiller/game-of-lights"
   },
-  "engines": {
-    "node": ">= 0.10",
-    "npm": ">= 1.4"
-  },
-  "scripts": {
-    "prestart": "./node_modules/.bin/browserify client.js -o public/script.js"
-  },
-  "dependencies": {
-    "body-parser": "~1.2.0",
-    "browserify": "~3.41.0",
-    "express": "~4.3.1",
-    "holiday-udp": "~0.1.2",
-    "underscore": "~1.6.0"
-  },
-  "devDependencies": {},
-  "bundleDependencies": [],
-  "private": true,
-  "main": "server.js"
+	"engines": {
+		"node": ">= 0.10",
+		"npm": ">= 1.4"
+	},
+	"scripts": {
+		"prestart": "./node_modules/.bin/browserify client.js -o public/script.js"
+	},
+	"dependencies": {
+		"body-parser": "^1.19.0",
+		"browserify": "^16.5.1",
+		"express": "^4.17.1",
+		"holiday-udp": "~0.1.2",
+		"underscore": "~1.6.0"
+	},
+	"devDependencies": {},
+	"bundleDependencies": [],
+	"main": "server.js"
 }
