@@ -1,5 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 var gametick = require('./game');
+var timeoutID;
 
 var setHandlers = function (handler) {
 	for (var i = 0; i < 49; i++) {
@@ -23,6 +24,10 @@ var submit = function (e) {
 	var aliveColour = getValue('aliveColour');
 	var deadColour = getValue('deadColour');
 	var worldPattern = [];
+
+	if (document.getElementsByTagName('pre').length > 0) {
+		document.getElementsByTagName('pre')[0].remove();
+	}
 
 	for (var i = 0; i < 49; i++) {
 		var state = document.getElementById(i).className;
@@ -70,12 +75,12 @@ var updateCells = function (cellBools) {
 
 var displayTicks = function (seedPattern, delay, alive, dead) {
 	updateCellCss(alive, dead);
-	setHandlers(null);
 	doTick(seedPattern, delay);
 };
 
 var doTick = function (state, delay) {
-	setTimeout(function () {
+	clearTimeout(timeoutID); // clear the old one before creating a new one
+	timeoutID = setTimeout(function () {
 		if (state.indexOf(true) != -1) {
 			var newWorld = gametick(state);
 			updateCells(newWorld);
@@ -108,7 +113,7 @@ var getValue = function (elemId) {
 	return document.getElementById(elemId).value;
 };
 
-// Initial setup
+// Init
 setHandlers(toggleState);
 document.forms[0].onsubmit = submit;
 },{"./game":2}],2:[function(require,module,exports){

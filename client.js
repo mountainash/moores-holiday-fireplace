@@ -1,4 +1,5 @@
 var gametick = require('./game');
+var timeoutID;
 
 var setHandlers = function (handler) {
 	for (var i = 0; i < 49; i++) {
@@ -22,6 +23,10 @@ var submit = function (e) {
 	var aliveColour = getValue('aliveColour');
 	var deadColour = getValue('deadColour');
 	var worldPattern = [];
+
+	if (document.getElementsByTagName('pre').length > 0) {
+		document.getElementsByTagName('pre')[0].remove();
+	}
 
 	for (var i = 0; i < 49; i++) {
 		var state = document.getElementById(i).className;
@@ -69,12 +74,12 @@ var updateCells = function (cellBools) {
 
 var displayTicks = function (seedPattern, delay, alive, dead) {
 	updateCellCss(alive, dead);
-	setHandlers(null);
 	doTick(seedPattern, delay);
 };
 
 var doTick = function (state, delay) {
-	setTimeout(function () {
+	clearTimeout(timeoutID); // clear the old one before creating a new one
+	timeoutID = setTimeout(function () {
 		if (state.indexOf(true) != -1) {
 			var newWorld = gametick(state);
 			updateCells(newWorld);
@@ -107,6 +112,6 @@ var getValue = function (elemId) {
 	return document.getElementById(elemId).value;
 };
 
-// Initial setup
+// Init
 setHandlers(toggleState);
 document.forms[0].onsubmit = submit;
