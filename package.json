@@ -1,22 +1,25 @@
 {
-  "name": "GameofLights",
-  "version": "1.0.0",
-  "description": "Game of Life output to a Holiday by MooresCloud, arranged in 7x7 grid",
-  "keywords": [
-    "OpenShift",
-    "Holiday",
-    "game of life",
-    "openshift"
-  ],
-  "author": {
-    "name": "Katie Miller",
-    "email": "katie@codemiller.com",
-    "url": "http://www.codemiller.com/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/codemiller/game-of-lights"
-  },
+	"name": "moores-holiday-fireplace",
+	"version": "1.0.0",
+	"description": "Turn rows of looped Moores Cloud Holiday lights into a fire",
+	"keywords": [
+		"fire",
+		"Moores",
+		"Holiday",
+		"lights",
+		"flicker",
+		"cabin",
+		"IoT"
+	],
+	"author": {
+		"name": "Mountain/\\Ash",
+		"email": "yo@mountainash.id.au",
+		"url": "https://mountainash.id.au/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mountainash/moores-holiday-fireplace"
+	},
 	"engines": {
 		"node": ">= 0.10",
 		"npm": ">= 1.4"
@@ -33,5 +36,7 @@
 	},
 	"devDependencies": {},
 	"bundleDependencies": [],
+	"private": true,
+	"license": "MIT",
 	"main": "server.js"
 }

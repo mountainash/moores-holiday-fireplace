@@ -1,0 +1,7 @@
+{
+	"easycompile.compile": {
+		"ignore": [
+				"*"
+			]
+	}
+}
