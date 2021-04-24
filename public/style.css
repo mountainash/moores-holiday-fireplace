@@ -38,6 +38,7 @@ form div {
 label {
 	display: block;
 	font-weight: 700;
+	text-align: left;
 }
 button {
 	display: block;

@@ -1,5 +1,5 @@
-var gametick = require('./game');
-var timeoutID;
+var gametick = require('./game'),
+	timeoutID;
 
 var setHandlers = function (handler) {
 	for (var i = 0; i < 49; i++) {
@@ -19,10 +19,10 @@ var toggleState = function () {
 var submit = function (e) {
 	e.preventDefault();
 
-	var tickDelay = getValue('tickDelay');
-	var aliveColour = getValue('aliveColour');
-	var deadColour = getValue('deadColour');
-	var worldPattern = [];
+	var timing = getValue('timing'),
+		aliveColour = getValue('aliveColour'),
+		deadColour = getValue('deadColour'),
+		worldPattern = [];
 
 	if (document.getElementsByTagName('pre').length > 0) {
 		document.getElementsByTagName('pre')[0].remove();
@@ -40,7 +40,7 @@ var submit = function (e) {
 
 	var data = {
 		'host': getValue('holidayHost'),
-		'delay': tickDelay,
+		'delay': timing,
 		'alive': aliveColour,
 		'dead': deadColour,
 		'pattern': worldPattern
@@ -52,7 +52,7 @@ var submit = function (e) {
 	http.onreadystatechange = function () {
 		if (http.readyState == 4 && http.status == 200) {
 			setMessage('Pattern sent');
-			displayTicks(worldPattern, tickDelay, aliveColour, deadColour);
+			displayTicks(worldPattern, timing, aliveColour, deadColour);
 		} else if (http.readyState == 4) {
 			setMessage('Network error');
 		}

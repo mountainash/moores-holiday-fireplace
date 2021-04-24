@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Setup</title>
+	<title>Holiday Setup</title>
 	<link rel="stylesheet" href="public/style.css">
 </head>
 <body>
@@ -75,9 +75,9 @@
 	</table>
 	<form class="form">
 		<div><label>Holiday host:</label> <input type="text" id="holidayHost" value="192.168.178.24" required></div>
-		<div><label>Tick milliseconds:</label> <input type="number" id="tickDelay" value="1000" min="0" step="100"></div>
-		<div><label>Alive colour:</label> <input type="color" id="aliveColour" value="#360A5E"></div>
-		<div><label>Dead colour:</label> <input type="color" id="deadColour" value="#000000"></div>
+		<div><label>Timing:</label> <input type="number" id="timing" value="1000" min="0" step="100"></div>
+		<div><label>On colour:</label> <input type="color" id="aliveColour" value="#FFFFFF"></div>
+		<div><label>Off colour:</label> <input type="color" id="deadColour" value="#000000"></div>
 		<button type="submit" onsubmit="submit()">Start</button>
 	</form>
 	<script src="public/script.js"></script>

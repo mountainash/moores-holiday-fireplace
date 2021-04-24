@@ -60,14 +60,14 @@ var GameOfLightsApp = function () {
 		}
 		var startPattern = req.body.pattern;
 		var host = req.body.host;
-		var tickDelay = req.body.delay || "1000";
+		var timing = req.body.delay || "1000";
 		var aliveColour = req.body.alive || "#360A5E";
 		var deadColour = req.body.dead || "#000000";
 
 		holiday.init(host, aliveColour, deadColour);
 		res.sendStatus(200);
 		console.log('Sending pattern to Holiday');
-		self.doTick(startPattern, tickDelay);
+		self.doTick(startPattern, timing);
 	};
 
 	self.getHome = function (req, res) {
