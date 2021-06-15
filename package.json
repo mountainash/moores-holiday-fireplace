@@ -1,6 +1,6 @@
 {
 	"name": "moores-holiday-fireplace",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Turn rows of looped Moores Cloud Holiday lights into a fire",
 	"keywords": [
 		"fire",
@@ -9,6 +9,7 @@
 		"lights",
 		"flicker",
 		"cabin",
+		"LED",
 		"IoT"
 	],
 	"author": {
@@ -29,10 +30,10 @@
 	},
 	"dependencies": {
 		"body-parser": "^1.19.0",
-		"browserify": "^16.5.1",
+		"browserify": "^17.0.0",
 		"express": "^4.17.1",
-		"holiday-udp": "~0.1.2",
-		"underscore": "~1.6.0"
+		"holiday-udp": "^0.1.1",
+		"underscore": "~1.13.1"
 	},
 	"devDependencies": {},
 	"bundleDependencies": [],

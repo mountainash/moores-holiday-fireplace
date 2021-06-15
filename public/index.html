@@ -73,12 +73,12 @@
 			<td id="48" class="dead">
 		</tr>
 	</table>
-	<form class="form">
+	<form class="form" onsubmit="submit()">
 		<div><label>Holiday host:</label> <input type="text" id="holidayHost" value="192.168.178.24" required></div>
 		<div><label>Timing:</label> <input type="number" id="timing" value="1000" min="0" step="100"></div>
 		<div><label>On colour:</label> <input type="color" id="aliveColour" value="#FFFFFF"></div>
 		<div><label>Off colour:</label> <input type="color" id="deadColour" value="#000000"></div>
-		<button type="submit" onsubmit="submit()">Start</button>
+		<button type="submit">Start</button>
 	</form>
 	<script src="public/script.js"></script>
 </body>
