@@ -7,6 +7,7 @@ var bodyParser = require('body-parser')
 var holiday = require('./holiday');
 var gametick = require('./game');
 var ticking = 0;
+var ipholiday_default = '192.168.178.24';
 
 var GameOfLightsApp = function () {
 
@@ -16,6 +17,7 @@ var GameOfLightsApp = function () {
 		//  Set the environment variables
 		self.ipaddress = process.env.NODEJS_IP;
 		self.port = process.env.NODEJS_PORT || 8080;
+		self.ipholiday = process.env.HOLIDAY_IP || ipholiday_default;
 
 		if (typeof self.ipaddress === "undefined") {
 			self.ipaddress = "127.0.0.1";
@@ -27,10 +29,14 @@ var GameOfLightsApp = function () {
 			self.zcache = { 'index.html': '' };
 		}
 
-		//  Local cache for static content
-		self.zcache['index.html'] = fs.readFileSync('public/index.html');
-	};
+		function replaceIP(htmlstring) {
+			return htmlstring.replace(new RegExp(ipholiday_default, 'g'), self.ipholiday);
+		}
 
+		//  Local cache for static content
+		let index = fs.readFileSync('public/index.html', 'utf8');
+		self.zcache['index.html'] = replaceIP( index );
+	};
 
 	self.cache_get = function (key) { return self.zcache[key]; };
 
