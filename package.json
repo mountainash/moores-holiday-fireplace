@@ -1,6 +1,6 @@
 {
 	"name": "moores-holiday-fireplace",
-	"version": "1.0.4",
+	"version": "1.1.0",
 	"description": "Turn rows of looped Moores Cloud Holiday lights into a fire",
 	"private": true,
 	"license": "MIT",
