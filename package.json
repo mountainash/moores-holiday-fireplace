@@ -23,12 +23,12 @@
 		"url": "https://github.com/mountainash/moores-holiday-fireplace"
 	},
 	"engines": {
-		"node": ">= 0.10",
+		"node": ">= 20",
 		"npm": ">= 1.4"
 	},
-	"main": "server.js",
 	"scripts": {
-		"prestart": "./node_modules/.bin/browserify client.js -o public/script.js"
+		"prestart": "browserify client.js -o public/script.js",
+		"start": "node --env-file .env server.js"
 	},
 	"dependencies": {
 		"body-parser": "^1.20.2",
