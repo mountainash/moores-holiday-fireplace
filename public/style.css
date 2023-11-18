@@ -1,3 +1,15 @@
+:root {
+	color-scheme: light dark;
+	--color-border: #000;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-border: #FFF;
+	}
+}
+
 body {
 	width: 294px;
 	margin: auto;
@@ -7,7 +19,8 @@ body {
 table,
 th,
 td {
-	border: 1px solid black;
+	border: 1px solid var(--color-border);
+	border-radius: 2px;
 }
 table {
 	width: 100%;
@@ -27,9 +40,8 @@ pre {
 	display: block;
 	margin: 0 auto 1em;
 	padding: 1em;
-	background: rgb(253, 255, 233);
-	border-radius: 5px;
-	box-shadow: 0 1px 3px rgb(225, 226, 223);
+	background: #343903;
+	color: aquamarine;
 }
 form div {
 	display: flex;
@@ -48,7 +60,7 @@ button {
 	margin-top: 1em;
 	padding: 1em 4em;
 	background: transparent;
-	border: 1px solid #000;
-	border-radius: 5px;
+	border: 1px solid var(--color-border);
+	border-radius: 2px;
 	font-weight: bold;
 }
