@@ -72,7 +72,7 @@ var GameOfLightsApp = function () {
 
 		holiday.init(host, aliveColour, deadColour);
 		res.sendStatus(200);
-		console.log('Sending pattern to Holiday');
+		console.log('Sending pattern to Holiday', host);
 		self.doTick(startPattern, timing);
 	};
 
