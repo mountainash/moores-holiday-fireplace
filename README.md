@@ -7,4 +7,5 @@ A heavy modification of [Game-of-Lights](https://github.com/katiejots/game-of-li
 npm install
 npm start
 ```
-- http://127.0.0.1:8080
+
+- <http://127.0.0.1:8080>
