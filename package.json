@@ -29,7 +29,7 @@
 	"scripts": {
 		"prestart": "browserify client.js -o public/script.js",
 		"start": "node --env-file .env server.js",
-		"dev": "node --env-file .env --watch server.js"
+		"dev": "npm run prestart && node --env-file .env --watch server.js"
 	},
 	"dependencies": {
 		"body-parser": "^1.20.2",
