@@ -66,7 +66,7 @@ var GameOfLightsApp = function () {
 		}
 		var startPattern = req.body.pattern;
 		var host = req.body.host;
-		var timing = req.body.delay || "1000";
+		var timing = Number(req.body.delay) || 1000;
 		var aliveColour = req.body.alive || "#360A5E";
 		var deadColour = req.body.dead || "#000000";
 
