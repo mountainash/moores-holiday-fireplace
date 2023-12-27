@@ -107,35 +107,64 @@ document.getElementById('preset-fire').addEventListener('click', () => {
 	}, getFormValues().timing);
 });
 
+/* Preset: CYCLES */
 document.getElementById('preset-cycles').addEventListener('click', async () => {
 	uiReset();
+	let l = 1, // limit of colors to use
+		g = 5; // grouping size of colors
+	const swatchesLength = palette_cycles.length;
 
-	// TODO: make pattern shift based on timing
-	const lightsPattern = colorsToPattern(palette_cycles, 4, 4);
+	timeoutID = setInterval(async () => {
+		clearMessages();
 
-	if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
-		updateCellsBG(lightsPattern);
+		// TODO: make pattern shift based on timing
+		const lightsPattern = colorsToPattern(palette_cycles, l, g);
 
+		if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
+			updateCellsBG(lightsPattern);
+
+		l++;
+		if (l > palette_cycles.length) {
+			l = 1;
+		}
+
+		g--;
+		if (g < 0) {
+			g = 6;
+		}
+	}, getFormValues().timing);
 });
 
+/* Preset: GLITTERBOMB */
 document.getElementById('preset-glitterbomb').addEventListener('click', async () => {
 	uiReset();
 
-	const lightsPattern = Array(50);
+	timeoutID = setInterval(async () => {
+		clearMessages();
 
-	for (let i = lightsPattern.length - 1; i >= 0; --i) {
-		lightsPattern[i] = randomColor();
-	};
+		const lightsPattern = Array(50);
 
-	if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
-		updateCellsBG(lightsPattern);
+		for (let i = lightsPattern.length - 1; i >= 0; --i) {
+			lightsPattern[i] = randomColor();
+		};
+
+		if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
+			updateCellsBG(lightsPattern);
+
+	}, getFormValues().timing);
 });
 
-document.getElementById('preset-random').addEventListener('click', async () => {
+/* Preset: RANDOM */
+document.getElementById('preset-random').addEventListener('click', () => {
 	uiReset();
 
-	const lightsPattern = Array(50).fill(randomColor());
+	timeoutID = setInterval(async () => {
+		clearMessages();
 
-	if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
-		updateCellsBG(lightsPattern);
+		const lightsPattern = Array(50).fill(randomColor());
+
+		if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
+			updateCellsBG(lightsPattern);
+
+	}, getFormValues().timing);
 });
