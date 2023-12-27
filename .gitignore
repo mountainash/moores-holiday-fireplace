@@ -1,8 +1,5 @@
 .env
 
-# Browserify build
-public/script.js
-
 # Logs
 logs
 *.log
