@@ -39,3 +39,15 @@ export const clearMessages = () => {
 		messages[i].remove();
 	};
 }
+
+// Get all the form values and return them as an object
+export const getFormValues = () => {
+	const form = document.forms[0];
+
+	return {
+		host: form.holidayHost.value,
+		timing: form.timing.value,
+		aliveColour: form.aliveColour.value,
+		deadColour: form.deadColour.value,
+	};
+};

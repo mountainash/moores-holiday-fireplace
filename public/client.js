@@ -1,32 +1,33 @@
-import { clearMessages, setCellHandlers, updateCellsBG } from './helpers-dom.js';
+import { clearMessages, getFormValues, setCellHandlers, updateCellsBG } from './helpers-dom.js';
 import { colorsToPattern, randomColor, rgbToArray, sendToServer } from './helpers-lights.js';
 import { fireRow2, fireRow3, fireRow4, fireRow5, fireRow6, fireRow7, palette_cycles } from './patterns.js';
 
 console.log(fireRow7);
 const form = document.forms[0],
-	holidayHost = form.holidayHost.value;
+	holidayHost = getFormValues().host;
 
 let timeoutID;
 
-const submit = (e) => {
-	if (e) e.preventDefault();
-	console.log('submit');
-
+function uiReset() {
 	clearMessages();
-	clearTimeout(timeoutID); // clear any old timers
+	clearTimeout(timeoutID);
+}
 
-	var timing = form.timing.value,
-		aliveColour = form.aliveColour.value,
-		deadColour = form.deadColour.value,
+const submit = async (e) => {
+	if (e) e.preventDefault();
+
+	uiReset();
+
+	let timing = getFormValues().timing,
 		lightsPattern = [];
 
 	// Get the current pattern from the DOM table
-	for (var i = 0; i < 49; i++) {
+	for (let i = 0; i < 49; i++) {
 		let bgColor = window.getComputedStyle(document.getElementById(`light${i}`)).getPropertyValue('background-color');
 		lightsPattern.push(rgbToArray(bgColor));
 	}
 
-	if (sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
+	if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
 		updateCellCss(aliveColour, deadColour);
 };
 
@@ -45,11 +46,11 @@ const updateCells = (cellBools) => {
 
 // Changes the colors of the on & off cells
 const updateCellCss = (newAlive, newDead) => {
-	var rulesList = document.styleSheets[0].cssRules;
+	let rulesList = document.styleSheets[0].cssRules;
 
 	if (rulesList) {
-		for (var i = 0; i < rulesList.length; i++) {
-			var rule = rulesList[i];
+		for (let i = 0; i < rulesList.length; i++) {
+			let rule = rulesList[i];
 			if (rule.selectorText == '.alive') {
 				rule.style.background = newAlive;
 			} else if (rule.selectorText == '.dead') {
@@ -61,8 +62,9 @@ const updateCellCss = (newAlive, newDead) => {
 
 // Gets the currently set colors from both color inputs, then updates the cells
 const setColorHandlers = () => {
-	const aliveColour = form.aliveColour.value,
-		deadColour = form.deadColour.value;
+	const formValues = getFormValues(),
+		aliveColour = formValues.aliveColour,
+		deadColour = formValues.deadColour;
 	updateCellCss(aliveColour, deadColour);
 	submit();
 };
@@ -75,10 +77,11 @@ form.addEventListener('submit', submit);
 form.aliveColour.addEventListener('input', setColorHandlers, false);
 form.deadColour.addEventListener('input', setColorHandlers, false);
 
+/* Preset: FIRE */
 document.getElementById('preset-fire').addEventListener('click', () => {
 	// let's make a fire
 	// wrap in a timer to call based on timing
-	clearTimeout(timeoutID); // clear the old timer before creating a new one
+	uiReset(); // clear the old timer before creating a new one
 	let i = 0;
 
 	timeoutID = setInterval(async () => {
@@ -101,11 +104,14 @@ document.getElementById('preset-fire').addEventListener('click', () => {
 			// clearTimeout(timeoutID);
 			i = 0;
 		}
-	}, form.timing.value);
+	}, getFormValues().timing);
 });
 
 document.getElementById('preset-cycles').addEventListener('click', async () => {
-	let lightsPattern = colorsToPattern(palette_cycles, 4, 4);
+	uiReset();
+
+	// TODO: make pattern shift based on timing
+	const lightsPattern = colorsToPattern(palette_cycles, 4, 4);
 
 	if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
 		updateCellsBG(lightsPattern);
@@ -113,7 +119,9 @@ document.getElementById('preset-cycles').addEventListener('click', async () => {
 });
 
 document.getElementById('preset-glitterbomb').addEventListener('click', async () => {
-	let lightsPattern = Array(50);
+	uiReset();
+
+	const lightsPattern = Array(50);
 
 	for (let i = lightsPattern.length - 1; i >= 0; --i) {
 		lightsPattern[i] = randomColor();
@@ -124,6 +132,8 @@ document.getElementById('preset-glitterbomb').addEventListener('click', async ()
 });
 
 document.getElementById('preset-random').addEventListener('click', async () => {
+	uiReset();
+
 	const lightsPattern = Array(50).fill(randomColor());
 
 	if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
