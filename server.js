@@ -1,13 +1,12 @@
 #!/bin/env node
 
-var express = require('express');
-var fs = require('fs');
-var path = require('path');
-var bodyParser = require('body-parser')
-var holiday = require('./holiday');
-var gametick = require('./game');
-var ticking = 0;
-var ipholiday_default = '192.168.178.24';
+const express = require('express'),
+	fs = require('fs'),
+	path = require('path'),
+	bodyParser = require('body-parser'),
+	holiday = require('./holiday');
+
+const ipholiday_default = '192.168.178.24';
 
 var GameOfLightsApp = function () {
 
@@ -20,7 +19,7 @@ var GameOfLightsApp = function () {
 		self.ipholiday = process.env.HOLIDAY_IP || ipholiday_default;
 
 		if (typeof self.ipaddress === "undefined") {
-			self.ipaddress = "127.0.0.1";
+			self.ipaddress = '127.0.0.1';
 		};
 	};
 
@@ -42,10 +41,10 @@ var GameOfLightsApp = function () {
 
 	self.terminator = function (sig) {
 		if (typeof sig === "string") {
-			console.log('%s: Received %s - terminating sample app ...', Date(Date.now()), sig);
+			console.warn('%s: Received %s - terminating sample app ...', new Date().toLocaleString(), sig);
 			process.exit(1);
 		}
-		console.log('%s: Node server stopped.', Date(Date.now()));
+		console.warn('%s: Node server stopped.', new Date().toLocaleString());
 	};
 
 	self.setupTerminationHandlers = function () {
@@ -59,21 +58,19 @@ var GameOfLightsApp = function () {
 		});
 	};
 
-	self.postWorld = function (req, res) {
-		if (ticking) {
-			clearTimeout(ticking);
-			ticking = null;
-		}
-		var startPattern = req.body.pattern;
-		var host = req.body.host;
-		var timing = Number(req.body.delay) || 1000;
-		var aliveColour = req.body.alive || "#360A5E";
-		var deadColour = req.body.dead || "#000000";
+	self.postLights = function (req, res) {
+		var host = req.body.host,
+			startPattern = req.body.pattern;
 
-		holiday.init(host, aliveColour, deadColour);
+		console.log('Received pattern', startPattern);
 		res.sendStatus(200);
 		console.log('Sending pattern to Holiday', host);
-		self.doTick(startPattern, timing);
+
+		// set the "bonus" light, at the start of the string, equal to the cell (see README Notes)
+		if (startPattern.length === 49) {
+			startPattern = [startPattern[0]].concat(startPattern);
+		}
+		holiday(host, startPattern);
 	};
 
 	self.getHome = function (req, res) {
@@ -87,7 +84,7 @@ var GameOfLightsApp = function () {
 		self.app.use(bodyParser.urlencoded({ extended: false }));
 		self.app.use(bodyParser.json());
 		self.app.get('/', self.getHome);
-		self.app.post('/holiday', self.postWorld);
+		self.app.post('/holiday', self.postLights);
 	};
 
 	self.initialize = function () {
@@ -100,18 +97,9 @@ var GameOfLightsApp = function () {
 
 	self.start = function () {
 		self.app.listen(self.port, self.ipaddress, function () {
-			console.log('%s: Node server started on %s:%d ...', Date(Date.now()), self.ipaddress, self.port);
+			console.info('%s: Node server started on %s:%d ...', new Date().toLocaleString(), self.ipaddress, self.port);
 		});
 	};
-
-	self.doTick = function (world, delay) {
-		// Add the unused light at the start of the string
-		var render = [false].concat(world);
-		holiday(render);
-		ticking = setTimeout(function () {
-			self.doTick(gametick(world), delay);
-		}, delay);
-	}
 };
 
 var zapp = new GameOfLightsApp();

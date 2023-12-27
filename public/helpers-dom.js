@@ -6,6 +6,7 @@ export const setCellHandlers = (props) => {
 			let currentClassName = e.currentTarget?.className;
 			e.currentTarget.className = (currentClassName === 'alive') ? 'dead' : 'alive';
 
+			console.log('setCellHandlers', callback);
 			if (callback) { callback(); }
 		};
 	}
@@ -17,22 +18,24 @@ export const updateCellsBG = (pattern) => {
 	}
 	for (let i = 0; i < 49; i++) {
 		let cell = document.getElementById(`light${i}`);
-		cell.style.backgroundColor = `rgb(${pattern[i][0]}, ${pattern[i][1]}, ${pattern[i][2]})`;
+		if (cell)
+			cell.style.backgroundColor = `rgb(${pattern[i][0]}, ${pattern[i][1]}, ${pattern[i][2]})`;
 	}
 }
 
-export const setMessage = (msg) => {
+export const setMessage = (msg, error) => {
+	clearMessages();
 	const message = document.createElement('pre');
 	message.innerHTML = msg;
-	document.forms[0].appendChild(message);
+	message.className = error ? 'error' : 'success';
+	document.forms[0].insertBefore(message, null);
 };
 
-// Remove any existing message
+// Remove any existing messages
 export const clearMessages = () => {
 	const messages = document.getElementsByTagName('pre');
 
-	for (let message of messages) {
-		// I think there's a bug here... (with the browser not the code)
-		message.remove();
+	for (let i = messages.length - 1; i >= 0; --i) {
+		messages[i].remove();
 	};
 }

@@ -1,44 +1,24 @@
+import { setMessage } from './helpers-dom.js';
 
-var tick = function (worldBools) {
-	var sideLength = 7;
+const black = [0, 0, 0];
 
-	var pointToIndex = function (point) {
-		return point.x + (point.y * sideLength);
+export const hexToRgb = function (hex) {
+	var re = /#(\w{2})(\w{2})(\w{2})/;
+	var result = re.exec(hex);
+	if (result) {
+		return [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)];
 	}
+	return black;
+};
 
-	var indexToPoint = function (index) {
-		var pointX = index % sideLength;
-		var pointY = Math.floor(index / sideLength);
-		return { x: pointX, y: pointY };
+export const rgbToArray = (rgb) => {
+	var re = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
+	var result = re.exec(rgb);
+	if (result) {
+		return [parseInt(result[1]), parseInt(result[2]), parseInt(result[3])];
 	}
-
-	var pointEquals = function (p1, p2) {
-		return p1.x == p2.x && p1.y == p2.y;
-	}
-
-	var neighbours = function (p) {
-		return [{ x: p.x - 1, y: p.y - 1 }, { x: p.x, y: p.y - 1 }, { x: p.x + 1, y: p.y - 1 },
-		{ x: p.x - 1, y: p.y }, { x: p.x + 1, y: p.y },
-		{ x: p.x - 1, y: p.y + 1 }, { x: p.x, y: p.y + 1 }, { x: p.x + 1, y: p.y + 1 }]
-			.map(wrapPoints);
-	};
-
-	var wrapPoints = function (point) {
-		return { x: inBound(point.x), y: inBound(point.y) };
-	}
-
-	var inBound = function (coord) {
-		if (coord == -1) { return sideLength - 1; }
-		if (coord >= sideLength) { return coord % sideLength; }
-		return coord;
-	}
-
-	var livePoints = worldBools.reduce(function (acc, elem, index) {
-		if (elem) { acc.push(index); }
-		return acc;
-	}, []).map(indexToPoint);
-
-	});
+	return black;
+};
 
 // takes a palette array of many rgb colors and a number to limit the choice of colors
 // takes an optional 3rd argument to determin the grouping of colors
@@ -54,6 +34,27 @@ export const colorsToPattern = (palette, limit, group) => {
 		colorSet.push(palette[(colorGroup % limit)]);
 	}
 
+	return colorSet;
 };
 
-module.exports = tick
+export const controlledRandom = (min, max, step) => {
+	return Math.floor(Math.random() * (max - min + 1) / step) * step + min;
+}
+
+export const randomColor = () => {
+	return [controlledRandom(0, 255, 1), controlledRandom(0, 255, 1), controlledRandom(0, 255, 1)];
+}
+
+export const sendToServer = (holidayData) => {
+	const http = new XMLHttpRequest();
+	http.open('POST', '/holiday', true);
+	http.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+	http.send(JSON.stringify(holidayData));
+	http.onreadystatechange = () => {
+		if (http.readyState == 4 && http.status == 200) {
+			setMessage('Pattern sent');
+		} else if (http.readyState == 4) {
+			setMessage('Network error (3)', 'error');
+		}
+	};
+}
