@@ -13,76 +13,76 @@
 
 	<table>
 		<tr>
-			<td id="0" class="dead">
-			<td id="1" class="dead">
-			<td id="2" class="dead">
-			<td id="3" class="dead">
-			<td id="4" class="dead">
-			<td id="5" class="dead">
-			<td id="6" class="dead">
+			<td id="light0" class="dead">
+			<td id="light1" class="dead">
+			<td id="light2" class="dead">
+			<td id="light3" class="dead">
+			<td id="light4" class="dead">
+			<td id="light5" class="dead">
+			<td id="light6" class="dead">
 		</tr>
 		<tr>
-			<td id="7" class="dead">
-			<td id="8" class="dead">
-			<td id="9" class="dead">
-			<td id="10" class="dead">
-			<td id="11" class="dead">
-			<td id="12" class="dead">
-			<td id="13" class="dead">
+			<td id="light7" class="dead">
+			<td id="light8" class="dead">
+			<td id="light9" class="dead">
+			<td id="light10" class="dead">
+			<td id="light11" class="dead">
+			<td id="light12" class="dead">
+			<td id="light13" class="dead">
 		</tr>
 		<tr>
-			<td id="14" class="dead">
-			<td id="15" class="dead">
-			<td id="16" class="dead">
-			<td id="17" class="dead">
-			<td id="18" class="dead">
-			<td id="19" class="dead">
-			<td id="20" class="dead">
+			<td id="light14" class="alive">
+			<td id="light15" class="dead">
+			<td id="light16" class="dead">
+			<td id="light17" class="dead">
+			<td id="light18" class="alive">
+			<td id="light19" class="dead">
+			<td id="light20" class="dead">
 		</tr>
 		<tr>
-			<td id="21" class="dead">
-			<td id="22" class="dead">
-			<td id="23" class="dead">
-			<td id="24" class="dead">
-			<td id="25" class="dead">
-			<td id="26" class="dead">
-			<td id="27" class="dead">
+			<td id="light21" class="dead">
+			<td id="light22" class="alive">
+			<td id="light23" class="dead">
+			<td id="light24" class="alive">
+			<td id="light25" class="alive">
+			<td id="light26" class="dead">
+			<td id="light27" class="dead">
 		</tr>
 		<tr>
-			<td id="28" class="dead">
-			<td id="29" class="dead">
-			<td id="30" class="dead">
-			<td id="31" class="dead">
-			<td id="32" class="dead">
-			<td id="33" class="dead">
-			<td id="34" class="dead">
+			<td id="light28" class="dead">
+			<td id="light29" class="dead">
+			<td id="light30" class="dead">
+			<td id="light31" class="alive">
+			<td id="light32" class="alive">
+			<td id="light33" class="alive">
+			<td id="light34" class="dead">
 		</tr>
 		<tr>
-			<td id="35" class="dead">
-			<td id="36" class="dead">
-			<td id="37" class="dead">
-			<td id="38" class="dead">
-			<td id="39" class="dead">
-			<td id="40" class="dead">
-			<td id="41" class="dead">
+			<td id="light35" class="dead">
+			<td id="light36" class="alive">
+			<td id="light37" class="alive">
+			<td id="light38" class="alive">
+			<td id="light39" class="alive">
+			<td id="light40" class="alive">
+			<td id="light41" class="alive">
 		</tr>
 		<tr>
-			<td id="42" class="dead">
-			<td id="43" class="dead">
-			<td id="44" class="dead">
-			<td id="45" class="dead">
-			<td id="46" class="dead">
-			<td id="47" class="dead">
-			<td id="48" class="dead">
+			<td id="light42" class="alive">
+			<td id="light43" class="alive">
+			<td id="light44" class="alive">
+			<td id="light45" class="alive">
+			<td id="light46" class="alive">
+			<td id="light47" class="alive">
+			<td id="light48" class="alive">
 		</tr>
 	</table>
-	<form class="form" onsubmit="submit()">
-		<div><label>Holiday host:</label> <input type="text" id="holidayHost" value="192.168.178.24" required></div>
-		<div><label>Timing:</label> <input type="number" id="timing" value="1000" min="0" step="100"></div>
-		<div><label>On colour:</label> <input type="color" id="aliveColour" value="#FFFFFF"></div>
-		<div><label>Off colour:</label> <input type="color" id="deadColour" value="#000000"></div>
-		<button type="submit">Start</button>
+	<form class="form">
+		<div><label>Holiday host: <input type="text" name="holidayHost" value="192.168.178.24" required></label></div>
+		<div><label>Timing: <input type="number" name="timing" value="1000" min="0" step="100" required></label></div>
+		<div><label>On colour: <input type="color" name="aliveColour" value="#FFFFFF" required></label></div>
+		<div><label>Off colour: <input type="color" name="deadColour" value="#000000" required></label></div>
+		<button type="submit">Send</button>
 	</form>
-	<script src="public/script.js"></script>
+	<script type="module" src="public/client.js"></script>
 </body>
 </html>
