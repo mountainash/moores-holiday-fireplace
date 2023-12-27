@@ -39,22 +39,25 @@ export const colorsToPattern = (palette, limit, group) => {
 
 export const controlledRandom = (min, max, step) => {
 	return Math.floor(Math.random() * (max - min + 1) / step) * step + min;
-}
+};
 
 export const randomColor = () => {
 	return [controlledRandom(0, 255, 1), controlledRandom(0, 255, 1), controlledRandom(0, 255, 1)];
-}
+};
 
-export const sendToServer = (holidayData) => {
-	const http = new XMLHttpRequest();
-	http.open('POST', '/holiday', true);
-	http.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
-	http.send(JSON.stringify(holidayData));
-	http.onreadystatechange = () => {
-		if (http.readyState == 4 && http.status == 200) {
-			setMessage('Pattern sent');
-		} else if (http.readyState == 4) {
-			setMessage('Network error (3)', 'error');
-		}
-	};
-}
+export const sendToServer = async (holidayData) => {
+	try {
+		const response = await fetch('/holiday', {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json;charset=UTF-8'
+			},
+			body: JSON.stringify(holidayData)
+		});
+		setMessage('Pattern sent');
+		return true;
+	} catch (error) {
+		setMessage('Network error (3)', 'error');
+		return false;
+	}
+};

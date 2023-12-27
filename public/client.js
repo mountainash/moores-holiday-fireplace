@@ -26,12 +26,8 @@ const submit = (e) => {
 		lightsPattern.push(rgbToArray(bgColor));
 	}
 
-	if (sendToServer({
-		'host': holidayHost,
-		'pattern': lightsPattern,
-	})) {
+	if (sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
 		updateCellCss(aliveColour, deadColour);
-	}
 };
 
 // TODO: replace from boolean array to color array
@@ -85,7 +81,7 @@ document.getElementById('preset-fire').addEventListener('click', () => {
 	clearTimeout(timeoutID); // clear the old timer before creating a new one
 	let i = 0;
 
-	timeoutID = setInterval(() => {
+	timeoutID = setInterval(async () => {
 		clearMessages();
 
 		// TODO: finish this....
@@ -93,7 +89,7 @@ document.getElementById('preset-fire').addEventListener('click', () => {
 		const lightsPattern = patterns[i];
 		// const lightsPattern = window[`fireRow${i}`];
 
-		if (sendToServer({ 'host': holidayHost, 'pattern': lightsPattern })) {
+		if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern })) {
 			updateCellsBG(lightsPattern);
 		} else {
 			clearTimeout(timeoutID);
@@ -108,10 +104,10 @@ document.getElementById('preset-fire').addEventListener('click', () => {
 	}, form.timing.value);
 });
 
-document.getElementById('preset-cycles').addEventListener('click', () => {
+document.getElementById('preset-cycles').addEventListener('click', async () => {
 	let lightsPattern = colorsToPattern(palette_cycles, 4, 4);
 
-	if (sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
+	if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
 		updateCellsBG(lightsPattern);
 
 });
@@ -123,13 +119,13 @@ document.getElementById('preset-glitterbomb').addEventListener('click', async ()
 		lightsPattern[i] = randomColor();
 	};
 
-	console.log(sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }));
-	updateCellsBG(lightsPattern);
+	if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
+		updateCellsBG(lightsPattern);
 });
 
-document.getElementById('preset-random').addEventListener('click', () => {
+document.getElementById('preset-random').addEventListener('click', async () => {
 	const lightsPattern = Array(50).fill(randomColor());
 
-	if (sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
+	if (await sendToServer({ 'host': holidayHost, 'pattern': lightsPattern }))
 		updateCellsBG(lightsPattern);
 });
