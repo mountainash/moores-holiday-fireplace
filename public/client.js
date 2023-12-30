@@ -6,10 +6,18 @@ const form = document.forms[0];
 
 let timeoutID;
 
-function uiReset() {
+const uiReset = () => {
 	clearMessages();
 	clearTimeout(timeoutID);
-}
+};
+
+const setLights = async (lightsPattern) => {
+	if (await sendToServer({ 'host': getFormValues().host, 'pattern': lightsPattern })) {
+		updateCellsBG(lightsPattern);
+	} else {
+		clearTimeout(timeoutID);
+	}
+};
 
 const submit = async (e) => {
 	if (e) e.preventDefault();
@@ -89,12 +97,9 @@ document.getElementById('preset-fire').addEventListener('click', () => {
 		const patterns = [fireRow2, fireRow3, fireRow4, fireRow5, fireRow6, fireRow7].reverse();
 		const lightsPattern = patterns[i];
 		// const lightsPattern = window[`fireRow${i}`];
+		// don't overright the coloured cells in the previous pattern, only update the black cells
 
-		if (await sendToServer({ 'host': getFormValues().host, 'pattern': lightsPattern })) {
-			updateCellsBG(lightsPattern);
-		} else {
-			clearTimeout(timeoutID);
-		}
+		setLights(lightsPattern);
 
 		i++;
 		// stop the loop
@@ -118,8 +123,7 @@ document.getElementById('preset-cycles').addEventListener('click', async () => {
 		// TODO: make pattern shift based on timing
 		const lightsPattern = colorsToPattern(palette_cycles, l, g);
 
-		if (await sendToServer({ 'host': getFormValues().host, 'pattern': lightsPattern }))
-			updateCellsBG(lightsPattern);
+		setLights(lightsPattern);
 
 		l++;
 		if (l > palette_cycles.length) {
@@ -146,8 +150,7 @@ document.getElementById('preset-glitterbomb').addEventListener('click', async ()
 			lightsPattern[i] = randomColor();
 		};
 
-		if (await sendToServer({ 'host': getFormValues().host, 'pattern': lightsPattern }))
-			updateCellsBG(lightsPattern);
+		setLights(lightsPattern);
 
 	}, getFormValues().timing);
 });
@@ -161,8 +164,7 @@ document.getElementById('preset-random').addEventListener('click', () => {
 
 		const lightsPattern = Array(50).fill(randomColor());
 
-		if (await sendToServer({ 'host': getFormValues().host, 'pattern': lightsPattern }))
-			updateCellsBG(lightsPattern);
+		setLights(lightsPattern);
 
 	}, getFormValues().timing);
 });

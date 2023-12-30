@@ -45,19 +45,19 @@ export const randomColor = () => {
 	return [controlledRandom(0, 255, 1), controlledRandom(0, 255, 1), controlledRandom(0, 255, 1)];
 };
 
-export const sendToServer = async (holidayData) => {
-	try {
-		const response = await fetch('/holiday', {
-			method: 'POST',
-			headers: {
-				'Content-type': 'application/json;charset=UTF-8'
-			},
-			body: JSON.stringify(holidayData)
+export const sendToServer = async (holidayData) => await fetch('/holiday', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json;charset=UTF-8'
+		},
+		body: JSON.stringify(holidayData)
+	}).
+		then(response => {
+			if (!response.ok) {
+				setMessage('Network error', 'error');
+				return false;
+			};
+
+			setMessage('Pattern sent');
+			console.info('Pattern sent', response);
 		});
-		setMessage('Pattern sent');
-		return true;
-	} catch (error) {
-		setMessage('Network error (3)', 'error');
-		return false;
-	}
-};
