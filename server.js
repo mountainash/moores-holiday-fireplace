@@ -4,7 +4,7 @@ const express = require('express'),
 	fs = require('fs'),
 	path = require('path'),
 	bodyParser = require('body-parser'),
-	holiday = require('./holiday');
+	sendLights = require('./holiday');
 
 const ipholiday_default = '192.168.178.24';
 
@@ -12,15 +12,13 @@ var GameOfLightsApp = function () {
 
 	var self = this;
 
-	self.setupVariables = function () {
-		//  Set the environment variables
-		self.ipaddress = process.env.NODEJS_IP;
-		self.port = process.env.NODEJS_PORT || 8080;
-		self.ipholiday = process.env.HOLIDAY_IP || ipholiday_default;
+	//  Set the environment variables
+	self.ipaddress = process.env.NODEJS_IP;
+	self.port = process.env.NODEJS_PORT || 8080;
+	self.ipholiday = process.env.HOLIDAY_IP || ipholiday_default;
 
-		if (typeof self.ipaddress === "undefined") {
-			self.ipaddress = '127.0.0.1';
-		};
+	if (typeof self.ipaddress === "undefined") {
+		self.ipaddress = '127.0.0.1';
 	};
 
 	self.populateCache = function () {
@@ -88,7 +86,6 @@ var GameOfLightsApp = function () {
 	};
 
 	self.initialize = function () {
-		self.setupVariables();
 		self.populateCache();
 		self.setupTerminationHandlers();
 
