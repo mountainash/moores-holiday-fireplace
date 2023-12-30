@@ -17,6 +17,12 @@ var GameOfLightsApp = function () {
 	self.port = Number(process.env.NODEJS_PORT) || 8080;
 	self.ipholiday = process.env.HOLIDAY_IP || ipholiday_default;
 
+	self.app = express();
+	self.app.use(express.static(path.join(__dirname, '/')));
+	self.app.use(bodyParser.urlencoded({ extended: false }));
+	self.app.use(bodyParser.json());
+	self.app.get('/', self.getHome);
+	self.app.post('/holiday', self.postLights);
 
 	self.populateCache = function () {
 		if (typeof self.zcache === "undefined") {
@@ -73,20 +79,9 @@ var GameOfLightsApp = function () {
 		res.send(self.cache_get('index.html'));
 	};
 
-	self.initializeServer = function () {
-		self.app = express();
-		self.app.use(express.static(path.join(__dirname, '/')));
-		self.app.use(bodyParser.urlencoded({ extended: false }));
-		self.app.use(bodyParser.json());
-		self.app.get('/', self.getHome);
-		self.app.post('/holiday', self.postLights);
-	};
-
 	self.initialize = function () {
 		self.populateCache();
 		self.setupTerminationHandlers();
-
-		self.initializeServer();
 	};
 
 	self.start = function () {
