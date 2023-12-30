@@ -1,17 +1,17 @@
 const HoliUdp = require('holiday-udp');
-let	holiudp;
 
-const sendLights = (holidayHost, lightsArray, responseFunc) => {
-	holiudp = new HoliUdp(holidayHost);
+const sendLights = (holidayHost, lightsArray) => {
+	const holiudp = new HoliUdp(holidayHost);
 
 	console.info('Sending lights', lightsArray);
 
 	holiudp.send(lightsArray, function (err) {
 		if (err) {
 			console.error(err);
-			if (responseFunc) { responseFunc(err); }
+			return err;
 		}
-	});
+		return true;
+	})
 };
 
 module.exports = sendLights

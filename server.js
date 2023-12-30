@@ -18,11 +18,6 @@ var GameOfLightsApp = function () {
 	self.ipholiday = process.env.HOLIDAY_IP || ipholiday_default;
 
 	self.app = express();
-	self.app.use(express.static(path.join(__dirname, '/')));
-	self.app.use(bodyParser.urlencoded({ extended: false }));
-	self.app.use(bodyParser.json());
-	self.app.get('/', self.getHome);
-	self.app.post('/holiday', self.postLights);
 
 	self.populateCache = function () {
 		if (typeof self.zcache === "undefined") {
@@ -64,14 +59,20 @@ var GameOfLightsApp = function () {
 			startPattern = req.body.pattern;
 
 		console.log('Received pattern', startPattern);
-		res.sendStatus(200);
-		console.log('Sending pattern to Holiday', host);
 
 		// set the "bonus" light, at the start of the string, equal to the cell (see README Notes)
 		if (startPattern.length === 49) {
 			startPattern = [startPattern[0]].concat(startPattern);
 		}
-		holiday(host, startPattern);
+		console.log('Sending pattern to Holiday', host);
+		const result = sendLights(host, startPattern)
+
+		if ( result ) {
+			res.sendStatus(200);
+		} else {
+			res.sendStatus(500);
+			res.send(result);
+		}
 	};
 
 	self.getHome = function (req, res) {
@@ -85,6 +86,12 @@ var GameOfLightsApp = function () {
 	};
 
 	self.start = function () {
+		self.app.use(express.static(path.join(__dirname, '/')));
+		self.app.use(bodyParser.urlencoded({ extended: false }));
+		self.app.use(bodyParser.json());
+		self.app.get('/', self.getHome);
+		self.app.post('/holiday', self.postLights);
+
 		self.app.listen(self.port, self.ipaddress, function () {
 			console.info('%s: Node server started on %s:%d ...', new Date().toLocaleString(), self.ipaddress, self.port);
 		});
