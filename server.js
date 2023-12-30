@@ -13,13 +13,10 @@ var GameOfLightsApp = function () {
 	var self = this;
 
 	//  Set the environment variables
-	self.ipaddress = process.env.NODEJS_IP;
-	self.port = process.env.NODEJS_PORT || 8080;
+	self.ipaddress = process.env.NODEJS_IP || '127.0.0.1';
+	self.port = Number(process.env.NODEJS_PORT) || 8080;
 	self.ipholiday = process.env.HOLIDAY_IP || ipholiday_default;
 
-	if (typeof self.ipaddress === "undefined") {
-		self.ipaddress = '127.0.0.1';
-	};
 
 	self.populateCache = function () {
 		if (typeof self.zcache === "undefined") {
