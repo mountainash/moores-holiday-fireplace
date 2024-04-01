@@ -1,5 +1,5 @@
 import { clearMessages, getFormValues, setCellHandlers, updateCellsBG } from './helpers-dom.js';
-import { colorsToPattern, randomColor, rgbToArray, sendToServer } from './helpers-lights.js';
+import { colorNudge, colorsToPattern, controlledRandom, randomColor, rgbToArray, sendToServer } from './helpers-lights.js';
 import { fireRow2, fireRow3, fireRow4, fireRow5, fireRow6, fireRow7, palette_cycles } from './patterns.js';
 
 const form = document.forms[0];
@@ -60,18 +60,26 @@ form.deadColour.addEventListener('input', submit, false);
 document.getElementById('preset-fire').addEventListener('click', () => {
 	// let's make a fire
 	uiReset(); // clear the old timer before creating a new one
+	const patterns = [fireRow2, fireRow3, fireRow4, fireRow5, fireRow6, fireRow7].reverse();
+
 	let i = 0;
 	let pattern = Array.from(fireRow7); // copy the array so we don't overwrite the original
 
 	timeoutID = setInterval(async () => {
 		clearMessages();
-
-		const patterns = [fireRow2, fireRow3, fireRow4, fireRow5, fireRow6, fireRow7].reverse();
-		// don't overright the coloured cells in the previous pattern, only update the black cells
-		pattern.forEach((cell, index) => {
-			if (cell[0] === 0 && cell[1] === 0 && cell[2] === 0) {
-				pattern[index] = patterns[i][index];
+		// don't overwrite the coloured cells in the previous pattern, only update the black cells
+		pattern.forEach((rgb, index) => {
+			if (rgb[0] === 0 && rgb[1] === 0 && rgb[2] === 0) {
+				if (controlledRandom(0, 10 * i, 1) > 9 * i) {
+					// The spread of "random" increases with the iteration. Only change if the random number is a slightly less factorlet color = controlledRandom(0, 255, 1);
+					pattern[index] = patterns[i][index];
+				}
 			}
+			let color = colorNudge(pattern[index], 4);
+			if (color[0] === color[1]) { // remove greys
+				color = [0, 0, 0];
+			}
+			pattern[index] = color;
 		});
 
 		setLights(pattern);
@@ -114,13 +122,31 @@ document.getElementById('preset-cycles').addEventListener('click', async () => {
 document.getElementById('preset-glitterbomb').addEventListener('click', async () => {
 	uiReset();
 
+	const lightsPattern = Array(50);
+
 	timeoutID = setInterval(async () => {
 		clearMessages();
 
-		const lightsPattern = Array(50);
-
-		for (let i = lightsPattern.length - 1; i >= 0; --i) {
+		for (let i = 0; i < lightsPattern.length; i++) { // this could be done with a map, but it's faster this way
 			lightsPattern[i] = randomColor();
+		};
+
+		setLights(lightsPattern);
+
+	}, getFormValues().timing);
+});
+
+/* Preset: GLITTERSHIMMER */
+document.getElementById('preset-glittershimmer').addEventListener('click', async () => {
+	uiReset();
+
+	let lightsPattern = Array(50).fill(1).map(_ => randomColor());
+
+	timeoutID = setInterval(async () => {
+		clearMessages();
+
+		for (let i = 0; i < lightsPattern.length; i++) {
+			lightsPattern[i] = colorNudge(lightsPattern[i], 7);
 		};
 
 		setLights(lightsPattern);

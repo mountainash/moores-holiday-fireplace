@@ -45,6 +45,23 @@ export const randomColor = () => {
 	return [controlledRandom(0, 255, 1), controlledRandom(0, 255, 1), controlledRandom(0, 255, 1)];
 };
 
+export const colorNudge = (rgb, factor) => {
+	rgb.forEach((cell, i) => {
+		if (cell % 3 === 0) {
+			rgb[i] = cell + factor;
+		} else {
+			rgb[i] = cell - factor;
+		}
+
+		// keep the values within the 0-255 range
+		if (rgb[i] < 0 || rgb[i] > 255) {
+			rgb[i] = 127 + factor;
+		}
+	});
+
+	return rgb;
+};
+
 export const sendToServer = async (holidayData) => await fetch('/holiday', {
 	method: 'POST',
 	headers: {

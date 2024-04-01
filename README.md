@@ -2,6 +2,8 @@
 
 A heavy modification of [Game-of-Lights](https://github.com/katiejots/game-of-lights) to show a "fire" behind my heater.
 
+<video width="630" height="300" src="public/holiday-fire.mp4"></video>
+
 ## Use
 
 ```sh
