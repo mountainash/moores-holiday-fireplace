@@ -46,18 +46,18 @@ export const randomColor = () => {
 };
 
 export const sendToServer = async (holidayData) => await fetch('/holiday', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json;charset=UTF-8'
-		},
-		body: JSON.stringify(holidayData)
-	}).
-		then(response => {
-			if (!response.ok) {
-				setMessage('Network error', 'error');
-				return false;
-			};
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json;charset=UTF-8'
+	},
+	body: JSON.stringify(holidayData)
+}).
+	then(response => {
+		if (!response.ok) {
+			setMessage('Network error', 'error');
+			return false;
+		};
 
-			setMessage('Pattern sent');
-			console.info('Pattern sent', response);
-		});
+		setMessage('Pattern sent');
+		return true;
+	});

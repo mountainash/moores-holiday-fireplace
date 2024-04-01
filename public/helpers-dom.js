@@ -1,13 +1,20 @@
+import { hexToRgb, rgbToArray } from './helpers-lights.js';
+
 export const setCellHandlers = (props) => {
 	const {callback} = props;
 
 	for (var i = 0; i < 49; i++) {
 		document.getElementById(`light${i}`).onclick = (e) => {
-			let currentClassName = e.currentTarget?.className;
-			e.currentTarget.className = (currentClassName === 'alive') ? 'dead' : 'alive';
+			// sets & toggles the bgColor of the cell being clicked
+			const bgColor = window.getComputedStyle(e.currentTarget).getPropertyValue('background-color'),
+				formValues = getFormValues(),
+				aliveColour = formValues.aliveColour,
+				deadColour = formValues.deadColour;
 
-			console.log('setCellHandlers', callback);
-			if (callback) { callback(); }
+			// stringify as you can't compare arrays (which are actually objects) directly
+			e.currentTarget.style.background = (JSON.stringify(rgbToArray(bgColor)) == JSON.stringify(hexToRgb(aliveColour))) ? deadColour : aliveColour;
+
+			if (callback) { callback() }
 		};
 	}
 };

@@ -15,6 +15,7 @@ const setLights = async (lightsPattern) => {
 	if (await sendToServer({ 'host': getFormValues().host, 'pattern': lightsPattern })) {
 		updateCellsBG(lightsPattern);
 	} else {
+		console.error('Clear timeoutID');
 		clearTimeout(timeoutID);
 	}
 };
@@ -24,8 +25,7 @@ const submit = async (e) => {
 
 	uiReset();
 
-	let timing = getFormValues().timing,
-		lightsPattern = [];
+	let lightsPattern = [];
 
 	// Get the current pattern from the DOM table
 	for (let i = 0; i < 49; i++) {
@@ -33,55 +33,28 @@ const submit = async (e) => {
 		lightsPattern.push(rgbToArray(bgColor));
 	}
 
-		updateCellCss(aliveColour, deadColour);
-};
-
-// TODO: replace from boolean array to color array
-const updateCells = (cellBools) => {
-	for (var i = 0; i < 49; i++) {
-		var newState = cellBools[i];
-		var cell = document.getElementById(`light${i}`);
-		if (newState) {
-			cell.className = 'alive';
-		} else {
-			cell.className = 'dead';
-		}
-	}
-};
-
-// Changes the colors of the on & off cells
-const updateCellCss = (newAlive, newDead) => {
-	let rulesList = document.styleSheets[0].cssRules;
-
-	if (rulesList) {
-		for (let i = 0; i < rulesList.length; i++) {
-			let rule = rulesList[i];
-			if (rule.selectorText == '.alive') {
-				rule.style.background = newAlive;
-			} else if (rule.selectorText == '.dead') {
-				rule.style.background = newDead;
-			}
-		}
-	}
-};
-
-// Gets the currently set colors from both color inputs, then updates the cells
-const setColorHandlers = () => {
-	const formValues = getFormValues(),
-		aliveColour = formValues.aliveColour,
-		deadColour = formValues.deadColour;
-	updateCellCss(aliveColour, deadColour);
-	submit();
-	if (await sendToServer({ 'host': getFormValues().host, 'pattern': lightsPattern }))
+	setLights(lightsPattern);
 };
 
 // Init
 setCellHandlers({ callback: submit });
 form.addEventListener('submit', submit);
 
-// 'input' gets the color as the user is changing it
-form.aliveColour.addEventListener('input', setColorHandlers, false);
-form.deadColour.addEventListener('input', setColorHandlers, false);
+// find any cells that match the color and change them to the new color
+const findAndChange = (id, color) => {
+	// TODO: need to link to the event listener below
+	const cells = document.querySelectorAll(`[style*="${id}"]`);
+
+	for (let i = 0; i < cells.length; i++) {
+		cells[i].style.backgroundColor = color;
+	}
+};
+
+
+// gets the currently set colors from both color inputs, then updates the cells
+// 'input' allows getting the event as the user is changing it
+form.aliveColour.addEventListener('input', submit, false);
+form.deadColour.addEventListener('input', submit, false);
 
 /* Preset: FIRE */
 document.getElementById('preset-fire').addEventListener('click', () => {
