@@ -42,10 +42,9 @@ pre {
 	padding: 1em;
 	background: #343903;
 	color: aquamarine;
+	opacity: .7;
+	animation: fade .5s linear forwards;
 
-	&.success {
-		animation: fade 1s linear 1s forwards;
-	}
 	&.error {
 		background: #470404;
 		color: red;
@@ -55,7 +54,7 @@ pre {
 
 @keyframes fade {
 	to {
-		opacity: 0;
+		opacity: 1;
 	}
 }
 
