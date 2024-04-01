@@ -75,9 +75,8 @@ document.getElementById('preset-fire').addEventListener('click', () => {
 		setLights(lightsPattern);
 
 		i++;
-		// stop the loop
+		// reset the loop
 		if (i >= patterns.length) {
-			// clearTimeout(timeoutID);
 			i = 0;
 		}
 	}, getFormValues().timing);
@@ -88,12 +87,10 @@ document.getElementById('preset-cycles').addEventListener('click', async () => {
 	uiReset();
 	let l = 1, // limit of colors to use
 		g = 5; // grouping size of colors
-	const swatchesLength = palette_cycles.length;
 
 	timeoutID = setInterval(async () => {
 		clearMessages();
 
-		// TODO: make pattern shift based on timing
 		const lightsPattern = colorsToPattern(palette_cycles, l, g);
 
 		setLights(lightsPattern);
