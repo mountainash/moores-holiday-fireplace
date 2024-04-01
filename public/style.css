@@ -38,12 +38,27 @@ td {
 }
 pre {
 	display: block;
-	margin: 0 auto 1em;
+	margin: 1em auto;
 	padding: 1em;
 	background: #343903;
 	color: aquamarine;
+	opacity: .7;
+	animation: fade .5s linear forwards;
+
+	&.error {
+		background: #470404;
+		color: red;
+		font-weight: bold;
+	}
 }
-form div {
+
+@keyframes fade {
+	to {
+		opacity: 1;
+	}
+}
+
+form label {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -57,10 +72,22 @@ label {
 button {
 	display: block;
 	width: 100%;
-	margin-top: 1em;
-	padding: 1em 4em;
 	background: transparent;
 	border: 1px solid var(--color-border);
 	border-radius: 2px;
 	font-weight: bold;
+	text-transform: uppercase;
+}
+nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1px;
+	margin-top: 1em;
+	padding: 0;
+	list-style: none;
+}
+nav li {
+	flex: 1;
 }

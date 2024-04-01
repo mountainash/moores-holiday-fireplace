@@ -1,28 +1,20 @@
-#!/bin/env node
+import express from 'express';
+import { readFileSync } from 'fs';
+import pkg from 'body-parser';
+import Holiday from './holiday.js';
 
-var express = require('express');
-var fs = require('fs');
-var path = require('path');
-var bodyParser = require('body-parser')
-var holiday = require('./holiday');
-var gametick = require('./game');
-var ticking = 0;
-var ipholiday_default = '192.168.178.24';
+const ipholiday_default = '192.168.1.126';
 
 var GameOfLightsApp = function () {
 
 	var self = this;
 
-	self.setupVariables = function () {
-		//  Set the environment variables
-		self.ipaddress = process.env.NODEJS_IP;
-		self.port = process.env.NODEJS_PORT || 8080;
-		self.ipholiday = process.env.HOLIDAY_IP || ipholiday_default;
+	//  Set the environment variables
+	self.ipaddress = process.env.NODEJS_IP || '127.0.0.1';
+	self.port = Number(process.env.NODEJS_PORT) || 8080;
+	self.ipholiday = process.env.HOLIDAY_IP || ipholiday_default;
 
-		if (typeof self.ipaddress === "undefined") {
-			self.ipaddress = "127.0.0.1";
-		};
-	};
+	self.app = express();
 
 	self.populateCache = function () {
 		if (typeof self.zcache === "undefined") {
@@ -34,7 +26,7 @@ var GameOfLightsApp = function () {
 		}
 
 		//  Local cache for static content
-		let index = fs.readFileSync('public/index.html', 'utf8');
+		let index = readFileSync('public/index.html', 'utf8');
 		self.zcache['index.html'] = replaceIP( index );
 	};
 
@@ -42,10 +34,10 @@ var GameOfLightsApp = function () {
 
 	self.terminator = function (sig) {
 		if (typeof sig === "string") {
-			console.log('%s: Received %s - terminating sample app ...', Date(Date.now()), sig);
+			console.warn('%s: Received %s - terminating sample app ...', new Date().toLocaleString(), sig);
 			process.exit(1);
 		}
-		console.log('%s: Node server stopped.', Date(Date.now()));
+		console.warn('%s: Node server stopped.', new Date().toLocaleString());
 	};
 
 	self.setupTerminationHandlers = function () {
@@ -59,21 +51,28 @@ var GameOfLightsApp = function () {
 		});
 	};
 
-	self.postWorld = function (req, res) {
-		if (ticking) {
-			clearTimeout(ticking);
-			ticking = null;
-		}
-		var startPattern = req.body.pattern;
-		var host = req.body.host;
-		var timing = Number(req.body.delay) || 1000;
-		var aliveColour = req.body.alive || "#360A5E";
-		var deadColour = req.body.dead || "#000000";
+	self.postLights = function (req, res) {
+		var host = req.body.host,
+			startPattern = req.body.pattern;
 
-		holiday.init(host, aliveColour, deadColour);
-		res.sendStatus(200);
+		console.log('Received pattern', startPattern);
+
+		// set the "bonus" light, at the start of the string, equal to the cell (see README Notes)
+		if (startPattern.length === 49) {
+			startPattern = [startPattern[0]].concat(startPattern);
+		}
 		console.log('Sending pattern to Holiday', host);
-		self.doTick(startPattern, timing);
+		const holiudp = new Holiday(host);
+
+		console.log('Sending pattern to Holiday', startPattern);
+		holiudp.send(startPattern, function (err) {
+			if ( err ) {
+				console.error('Error sending', err);
+				res.sendStatus(500);
+			} else {
+				res.sendStatus(200);
+			}
+		});
 	};
 
 	self.getHome = function (req, res) {
@@ -81,37 +80,22 @@ var GameOfLightsApp = function () {
 		res.send(self.cache_get('index.html'));
 	};
 
-	self.initializeServer = function () {
-		self.app = express();
-		self.app.use(express.static(path.join(__dirname, '/')));
-		self.app.use(bodyParser.urlencoded({ extended: false }));
-		self.app.use(bodyParser.json());
-		self.app.get('/', self.getHome);
-		self.app.post('/holiday', self.postWorld);
-	};
-
 	self.initialize = function () {
-		self.setupVariables();
 		self.populateCache();
 		self.setupTerminationHandlers();
-
-		self.initializeServer();
 	};
 
 	self.start = function () {
+		self.app.use(express.static('public'));
+		self.app.use(pkg.urlencoded({ extended: false }));
+		self.app.use(pkg.json());
+		self.app.get('/', self.getHome);
+		self.app.post('/holiday', self.postLights);
+
 		self.app.listen(self.port, self.ipaddress, function () {
-			console.log('%s: Node server started on %s:%d ...', Date(Date.now()), self.ipaddress, self.port);
+			console.info(`${ new Date().toLocaleString() }: Node server started on http://${ self.ipaddress }:${ self.port }`);
 		});
 	};
-
-	self.doTick = function (world, delay) {
-		// Add the unused light at the start of the string
-		var render = [false].concat(world);
-		holiday(render);
-		ticking = setTimeout(function () {
-			self.doTick(gametick(world), delay);
-		}, delay);
-	}
 };
 
 var zapp = new GameOfLightsApp();
