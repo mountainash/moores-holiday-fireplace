@@ -59,25 +59,28 @@ form.deadColour.addEventListener('input', submit, false);
 /* Preset: FIRE */
 document.getElementById('preset-fire').addEventListener('click', () => {
 	// let's make a fire
-	// wrap in a timer to call based on timing
 	uiReset(); // clear the old timer before creating a new one
 	let i = 0;
+	let pattern = Array.from(fireRow7); // copy the array so we don't overwrite the original
 
 	timeoutID = setInterval(async () => {
 		clearMessages();
 
-		// TODO: finish this....
 		const patterns = [fireRow2, fireRow3, fireRow4, fireRow5, fireRow6, fireRow7].reverse();
-		const lightsPattern = patterns[i];
-		// const lightsPattern = window[`fireRow${i}`];
 		// don't overright the coloured cells in the previous pattern, only update the black cells
+		pattern.forEach((cell, index) => {
+			if (cell[0] === 0 && cell[1] === 0 && cell[2] === 0) {
+				pattern[index] = patterns[i][index];
+			}
+		});
 
-		setLights(lightsPattern);
+		setLights(pattern);
 
 		i++;
 		// reset the loop
 		if (i >= patterns.length) {
 			i = 0;
+			pattern = Array.from(fireRow7);
 		}
 	}, getFormValues().timing);
 });
