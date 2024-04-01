@@ -2,7 +2,7 @@
 
 A heavy modification of [Game-of-Lights](https://github.com/katiejots/game-of-lights) to show a "fire" behind my heater.
 
-<video width="630" height="300" src="public/holiday-fire.mp4"></video>
+<video width="640" height="360" controls src="https://github.com/mountainash/moores-holiday-fireplace/raw/feat/shimmer/public/holiday-fire.mp4" title="Video showing set-up behind a European oil var heater"></video>
 
 ## Use
 
