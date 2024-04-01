@@ -1,12 +1,9 @@
-#!/bin/env node
+import express from 'express';
+import { readFileSync } from 'fs';
+import pkg from 'body-parser';
+import Holiday from './holiday.js';
 
-const express = require('express'),
-	fs = require('fs'),
-	path = require('path'),
-	bodyParser = require('body-parser'),
-	sendLights = require('./holiday');
-
-const ipholiday_default = '192.168.178.24';
+const ipholiday_default = '192.168.1.126';
 
 var GameOfLightsApp = function () {
 
@@ -29,7 +26,7 @@ var GameOfLightsApp = function () {
 		}
 
 		//  Local cache for static content
-		let index = fs.readFileSync('public/index.html', 'utf8');
+		let index = readFileSync('public/index.html', 'utf8');
 		self.zcache['index.html'] = replaceIP( index );
 	};
 
@@ -65,14 +62,17 @@ var GameOfLightsApp = function () {
 			startPattern = [startPattern[0]].concat(startPattern);
 		}
 		console.log('Sending pattern to Holiday', host);
-		const result = sendLights(host, startPattern)
+		const holiudp = new Holiday(host);
 
-		if ( result ) {
-			res.sendStatus(200);
-		} else {
-			res.sendStatus(500);
-			res.send(result);
-		}
+		console.log('Sending pattern to Holiday', startPattern);
+		holiudp.send(startPattern, function (err) {
+			if ( err ) {
+				console.error('Error sending', err);
+				res.sendStatus(500);
+			} else {
+				res.sendStatus(200);
+			}
+		});
 	};
 
 	self.getHome = function (req, res) {
@@ -86,14 +86,14 @@ var GameOfLightsApp = function () {
 	};
 
 	self.start = function () {
-		self.app.use(express.static(path.join(__dirname, '/')));
-		self.app.use(bodyParser.urlencoded({ extended: false }));
-		self.app.use(bodyParser.json());
+		self.app.use(express.static('public'));
+		self.app.use(pkg.urlencoded({ extended: false }));
+		self.app.use(pkg.json());
 		self.app.get('/', self.getHome);
 		self.app.post('/holiday', self.postLights);
 
 		self.app.listen(self.port, self.ipaddress, function () {
-			console.info('%s: Node server started on %s:%d ...', new Date().toLocaleString(), self.ipaddress, self.port);
+			console.info(`${ new Date().toLocaleString() }: Node server started on http://${ self.ipaddress }:${ self.port }`);
 		});
 	};
 };
