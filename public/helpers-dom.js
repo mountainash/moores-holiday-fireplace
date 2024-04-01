@@ -35,7 +35,7 @@ export const setMessage = (msg, error) => {
 	const message = document.createElement('pre');
 	message.innerHTML = msg;
 	message.className = error ? 'error' : 'success';
-	document.forms[0].insertBefore(message, null);
+	document.body.insertBefore(message, null);
 };
 
 // Remove any existing messages
